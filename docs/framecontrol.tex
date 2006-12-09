@@ -1,0 +1,36 @@
+The frame control is our direct interface to the LCD; it runs at 50
+Mhz and all of its outputs to the display are registered IOBs.
+
+At the assertion of FSTART, the frame control sets the value on the X
+and Y registers. 8 ticks later, the value on {R,G,B}in will be
+sampled. That value along with the necessary control signals will be
+output on the frame control interface. Note that the value on
+{R,G,B}in is latched, so it may change when the next pixel is
+requested.
+
+Note that the display wants DCLK to be continuous and samples on
+the falling edge of the clock.
+
+at ~ 8 ticks per pixel, including the hsync and vsync, we should be
+able to get ~20 FPS.
+
+
+\section{Implementation}
+
+To deal with the optrex front-porch and back-porch timing requirements
+we fracture our FSMs into two different FSMs, a horizontal one
+(hcs/hns) and a vertical one (vcs/vns).
+
+We also abuse the row and column counters in an attempt to reduce the
+number of counters. We take in the following config registers: 
+
+HFP[9:0]
+HBP[9:0]
+
+VFP[8:0]
+VBP[8:0]
+
+
+
+
+
