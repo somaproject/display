@@ -1,0 +1,8 @@
+A simple test of our frame controller
+
+We test that we have proper operation of:
+
+latency for data
+DENA
+the continuous data clock
+the data latency
