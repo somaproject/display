@@ -11,6 +11,7 @@ entity framecontrol is
   
   port (
     CLK  : in  std_logic;
+    FRAMESTART : in std_logic; 
     X    : out std_logic_vector(9 downto 0);
     Y    : out std_logic_vector(8 downto 0);
     DCLK : out std_logic;
@@ -34,19 +35,25 @@ architecture Behavioral of framecontrol is
   constant hfplen : std_logic_vector(9 downto 0) := "0000001000";
   
   constant vbplen : std_logic_vector(8 downto 0) := "000010000";
-  constant vlen : std_logic_vector(8 downto 0) := "0111100000";
+  constant vlen : std_logic_vector(8 downto 0) := "111100000";
   constant vfplen : std_logic_vector(8 downto 0) := "000001000";
 
-  signal tpos : integer range 0 to 7 := (others => '0');
+  signal tcnt : integer range 0 to 7 := 0; 
   
-  signal xreset, xen : std_logic := '0';
-  signal yreset, yen : std_logic := '0';
+  signal xreset,  xinc : std_logic := '0';
+  signal xint : std_logic_vector(9 downto 0) := (others => '0');
+  
+  signal yreset,  yinc : std_logic := '0';
+  signal yint : std_logic_vector(8 downto 0) := (others => '0');
 
   signal lhd, lvd : std_logic := '0';
   signal ldena : std_logic := '0';
 
   signal l1dclk, l2dclk, l3dclk, l4dclk : std_logic := '0';
 
+
+  signal rstart, rdone : std_logic := '0';
+  
   type hstates is (none, bpalign, bpout, bpinc,
                    pixalign, pixout, pixinc,
                    fpalign, fpout, fpinc, hdone);
@@ -55,7 +62,7 @@ architecture Behavioral of framecontrol is
 
   type vstates is (none,
                    bpalign, bpout, bpinc,
-                   rowalign, pixout, pixinc,
+                   rowalign, rowout, rowinc,
                    fpalign, fpout, fpinc, vdone);
 
   signal vcs, vns : vstates := none;
@@ -63,7 +70,10 @@ architecture Behavioral of framecontrol is
   
 begin  -- Behavioral
 
-  
+  rdone <= '1' when hcs = hdone else '0'; 
+
+  X <= xint;
+  Y <= yint; 
   main: process(clk)
     begin
       if rising_edge(CLK) then
@@ -72,16 +82,16 @@ begin  -- Behavioral
         hcs <= hns;
         vcs <= vns; 
                
-        if tpos = 7 then
-          tpos <= 0;
+        if tcnt = 7 then
+          tcnt <= 0;
         else
-          tpos <= tpos + 1; 
+          tcnt <= tcnt + 1; 
         end if;
 
         if xreset = '1' then
           xint <= (others => '0');
         else
-          if xen = '1'  then
+          if xinc = '1'  then
             xint <= xint + 1;
           end if;
         end if;
@@ -89,12 +99,12 @@ begin  -- Behavioral
         if yreset = '1' then
           yint <= (others => '0');
         else
-          if yen = '1'  then
+          if yinc = '1'  then
             yint <= yint + 1;
           end if;
         end if;
 
-        if tpos > 3 then
+        if tcnt > 3 then
           l1dclk <= '0';
         else
           l1dclk <= '1'; 
@@ -107,13 +117,13 @@ begin  -- Behavioral
         HD <= lhd;
         VD <=   lvd;
         ROUT <= RIN;
-        DOUT <= DIN;
+        GOUT <= GIN;
         BOUT <= BIN;
         
       end if;
     end process main; 
   
-    horizontal_fsm: process(hcs, rstart, tcnt, xint, hlen)
+    horizontal_fsm: process(hcs, rstart, tcnt, xint)
       begin
         case hcs is
           when none =>
@@ -158,17 +168,6 @@ begin  -- Behavioral
               hns <= pixalign; 
             else
               hns <= bpout; 
-            end if;
-
-          when pixalign =>
-            lhd <= '1';
-            xinc <= '0';
-            xreset <= '1';
-            ldena <= '0';
-            if tcnt = 7 then 
-              hns <= pixout; 
-            else
-              hns <= pixalign; 
             end if;
 
           when pixalign =>
@@ -253,17 +252,19 @@ begin  -- Behavioral
             xinc <= '0';
             xreset <= '1';
             ldena <= '0';
+            hns <= none;
+            
         end case;
       end process horizontal_fsm; 
 
-    vertical_fsm: process(vcs, framestart, tcnt, yint, vlen, vbplen, vfplen)
+    vertical_fsm: process(vcs, framestart, rdone,  tcnt, yint)
       begin
         case vcs is
           when none =>
             lvd <= '0';
             yinc <= '0';
             yreset <= '1';
-            rstart <= '1';             
+            rstart <= '0';             
             if framestart = '1' then
               vns <= bpalign;
             else
@@ -326,7 +327,7 @@ begin  -- Behavioral
             yinc <= '1';
             yreset <= '0';
             rstart <= '0'; 
-            if yint = ylen - 1 then
+            if yint = vlen - 1 then
               vns <= fpalign; 
             else
               vns <= rowout; 
