@@ -28,21 +28,21 @@ From  : PCB Document [display.PCBDOC]
 
 Output: BOM.text
 Type  : ReportComponents
-From  : Project [display.PRJPCB]
-   Generated File[Pro6E2.txt]
+From  : Project [DISPLAY.PRJPCB]
+   Generated File[Pro95D.txt]
 
 Output: BOM.html
 Type  : ReportComponents
-From  : Project [display.PRJPCB]
-   Generated File[Pro6E3.htm]
+From  : Project [DISPLAY.PRJPCB]
+   Generated File[Pro95E.htm]
 
 Output: BOM.xls
 Type  : ReportComponents
-From  : Project [display.PRJPCB]
-   Generated File[Pro6E5.xls]
+From  : Project [DISPLAY.PRJPCB]
+   Generated File[Pro960.xls]
 
 
 Files Generated   : 23
 Documents Printed : 0
 
-Finished Output Generation At 11:46:17 AM On 10/13/2006
+Finished Output Generation At 10:42:06 AM On 12/16/2006

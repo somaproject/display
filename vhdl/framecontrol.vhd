@@ -8,7 +8,6 @@ library UNISIM;
 use UNISIM.VComponents.all;
 
 entity framecontrol is
-  
   port (
     CLK  : in  std_logic;
     FRAMESTART : in std_logic; 
@@ -25,7 +24,6 @@ entity framecontrol is
     GIN : in std_logic_vector(5 downto 0);
     BIN : in std_logic_vector(5 downto 0)    
     );
-
 end framecontrol;
 
 architecture Behavioral of framecontrol is
@@ -34,7 +32,7 @@ architecture Behavioral of framecontrol is
   constant hlen : std_logic_vector(9 downto 0) := "0101000000";
   constant hfplen : std_logic_vector(9 downto 0) := "0000001000";
   
-  constant vbplen : std_logic_vector(8 downto 0) := "000010000";
+  constant vbplen : std_logic_vector(8 downto 0) := "000001001";
   constant vlen : std_logic_vector(8 downto 0) := "111100000";
   constant vfplen : std_logic_vector(8 downto 0) := "000001000";
 
@@ -116,6 +114,7 @@ begin  -- Behavioral
         
         HD <= lhd;
         VD <=   lvd;
+        DENA <= ldena; 
         ROUT <= RIN;
         GOUT <= GIN;
         BOUT <= BIN;
@@ -206,7 +205,7 @@ begin  -- Behavioral
           when fpalign =>
             lhd <= '1';
             xinc <= '0';
-            xreset <= '0';
+            xreset <= '1';
             ldena <= '0';
             if tcnt = 7 then
               hns <= fpout; 
@@ -241,11 +240,7 @@ begin  -- Behavioral
             xinc <= '1';
             xreset <= '0';
             ldena <= '0';
-            if xint = hfplen - 1 then
-              hns <=  hdone; 
-            else
-              hns <= fpout; 
-            end if;
+            hns <= none; 
 
           when others =>
             lhd <= '1';
@@ -275,19 +270,15 @@ begin  -- Behavioral
             lvd <= '0';
             yinc <= '0';
             yreset <= '1';
-            rstart <= '1'; 
-            if rdone = '1'  then
-              vns <= bpinc; 
-            else
-              vns <= bpout; 
-            end if;
-
+            rstart <= '0'; 
+            vns <= bpout;
+            
           when bpout =>
             lvd <= '0';
             yinc <= '0';
             yreset <= '0';
-            rstart <= '0'; 
-            if tcnt = 6 then
+            rstart <= '1'; 
+            if rdone = '1'  then
               vns <= bpinc; 
             else
               vns <= bpout; 

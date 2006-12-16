@@ -1,1 +1,2 @@
 vhdl work "blink.vhd"
+vhdl work "../../../vhdl/framecontrol.vhd"

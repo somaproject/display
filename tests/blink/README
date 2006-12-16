@@ -1,2 +1,5 @@
-A test to get the LEDs blinking and see if we can power up the CCFL. 
+A test to get the LEDs blinking and see if we can power up the
+CCFL. We also try the dummy framecontrol here. 
+
+
 
