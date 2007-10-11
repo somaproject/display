@@ -1,48 +1,5 @@
-Output: Gerber Files
-Type  : Gerber
-From  : PCB Document [display.PCBDOC]
-   Generated File[display.GTL]
-   Generated File[display.G1]
-   Generated File[display.G2]
-   Generated File[display.GBL]
-   Generated File[display.GTO]
-   Generated File[display.GBO]
-   Generated File[display.GTP]
-   Generated File[display.GBP]
-   Generated File[display.GTS]
-   Generated File[display.GBS]
-   Generated File[display.GP1]
-   Generated File[display.GP2]
-   Generated File[display.GM5]
-   Generated File[display.RUL]
-   Generated File[display.EXTREP]
-   Generated File[display.REP]
 
-Output: NC Drill Files
-Type  : NC Drill
-From  : PCB Document [display.PCBDOC]
-   Generated File[display.TXT]
-   Generated File[display.DRL]
-   Generated File[display.LDP]
-   Generated File[display.DRR]
-
-Output: BOM.text
-Type  : ReportComponents
-From  : Project [DISPLAY.PRJPCB]
-   Generated File[ProD9F.txt]
-
-Output: BOM.html
-Type  : ReportComponents
-From  : Project [DISPLAY.PRJPCB]
-   Generated File[ProDA0.htm]
-
-Output: BOM.xls
-Type  : ReportComponents
-From  : Project [DISPLAY.PRJPCB]
-   Generated File[ProDA2.xls]
-
-
-Files Generated   : 23
+Files Generated   : 0
 Documents Printed : 0
 
-Finished Output Generation At 2:32:48 PM On 9/26/2007
+Finished Output Generation At 1:11:33 PM On 10/9/2007

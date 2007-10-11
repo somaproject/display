@@ -214,7 +214,7 @@ Configuration27_Item2=Value=True|Footprint=True|LibRef=True
 Configuration27_Name3=SortOrder
 Configuration27_Item3=Designator=Up|Comment=Up|Footprint=Up
 Configuration27_Name4=VisibleOrder
-Configuration27_Item4=Description=100|Designator=100|Footprint=100|LibRef=100|Quantity=100|Value=100
+Configuration27_Item4=Description=261|Designator=100|Footprint=100|LibRef=100|Quantity=100|Value=100|Comment=100
 
 [CAMtasticOutputs]
 OpenODBOutput=False
