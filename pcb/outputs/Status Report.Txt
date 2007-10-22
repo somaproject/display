@@ -1,5 +1,10 @@
+Output: Generates pick and place files
+Type  : Pick Place
+From  : PCB Document [display.PCBDOC]
+   Generated File[Pick Place for display.csv]
 
-Files Generated   : 0
+
+Files Generated   : 1
 Documents Printed : 0
 
-Finished Output Generation At 9:31:00 PM On 10/11/2007
+Finished Output Generation At 8:18:53 AM On 10/22/2007

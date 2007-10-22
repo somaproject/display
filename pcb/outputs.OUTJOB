@@ -74,8 +74,10 @@ OutputType11=Pick Place
 OutputName11=Generates pick and place files
 OutputDocumentPath11=
 OutputVariantName11=
-OutputEnabled11=0
+OutputEnabled11=1
 OutputDefault11=0
+Configuration11_Name1=OutputConfigurationParameter1
+Configuration11_Item1=Record=PickPlaceView|Units=Imperial|GenerateCSVFormat=True|GenerateTextFormat=False
 OutputType12=CompositeDrill
 OutputName12=Composite Drill Drawing
 OutputDocumentPath12=
