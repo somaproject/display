@@ -127,6 +127,11 @@ architecture Behavioral of display is
   signal earxbytea    : std_logic_vector(7 downto 0) := (others => '0');
   signal earxbytesela : std_logic_vector(3 downto 0) := (others => '0');
 
+  signal earxbyteal    : std_logic_vector(7 downto 0) := (others => '0');
+  signal earxbyteselal : std_logic_vector(3 downto 0) := (others => '0');
+
+  signal earxbyteaout    : std_logic_vector(7 downto 0) := (others => '0');
+
   signal clk2x, clk2xint : std_logic := '0';
 
   signal ecycle : std_logic                    := '0';
@@ -232,6 +237,22 @@ architecture Behavioral of display is
 
 
   signal cnt : std_logic_vector(23 downto 0) := (others => '0');
+
+  signal jtagcapture : std_logic := '0';
+  signal jtagdrck1   : std_logic := '0';
+  signal jtagdrck2   : std_logic := '0';
+  signal jtagsel1    : std_logic := '0';
+  signal jtagsel2    : std_logic := '0';
+  signal jtagshift   : std_logic := '0';
+  signal jtagtdi     : std_logic := '0';
+  signal jtagtdo1    : std_logic := '0';
+  signal jtagtdo2    : std_logic := '0';
+  signal jtagupdate  : std_logic := '0';
+
+  signal jtagwordout : std_logic_vector(47 downto 0) := (others => '0');
+  signal jtagout     : std_logic_vector(63 downto 0) := (others => '0');
+
+  signal ecyclecnt : std_logic_vector(23 downto 0) := (others => '0');
   
 begin  -- display
 
@@ -320,16 +341,55 @@ begin  -- display
       ESENDREQ    => eprocreq(0),
       ESENDGRANT  => eprocgrant(0),
       ESENDDONE   => eprocdone(0),
-      ESENDDATA   => eprocdataa,
+      ESENDDATA   => eprocdataa
       -- dsp interface
-      LEDEVENT    => open);
+      --LEDEVENT    => LEDEVENT
+      );
 
-  process(REFCLKIN)
-    begin
-      if rising_edge(REFCLKIN) then
-        LEDEVENT <= not reset; 
+  process(jtagDRCK1, clk)
+  begin
+    if jtagupdate = '1' then
+      jtagout    <= X"1234" & jtagwordout;
+    else
+      if rising_edge(jtagDRCK1) then
+        jtagout  <= '0' & jtagout(63 downto 1);
+        jtagtdo1 <= jtagout(0);
       end if;
-    end process;
+
+    end if;
+  end process;
+
+  jtagwordout(23 downto 0) <= ecyclecnt;
+  jtagwordout(39 downto 32) <= earxbyteaout; 
+
+  BSCAN_SPARTAN3_inst : BSCAN_SPARTAN3
+    port map (
+      CAPTURE => jtagcapture,
+      DRCK1   => jtagdrck1,
+      DRCK2   => jtagDRCK2,
+      SEL1    => jtagSEL1,
+      SEL2    => jtagSEL2,
+      SHIFT   => jtagSHIFT,
+      TDI     => jtagTDI,
+      UPDATE  => jtagUPDATE,
+      TDO1    => jtagtdo1,
+      TDO2    => jtagtdo2
+      );
+
+
+  process(CLK2x)
+    begin
+      if rising_edge(clk2x) then
+        earxbyteal <= earxbytea;
+        
+        earxbyteselal <= earxbytesela;
+
+        if earxbytesela = "0001" and earxbyteselal = "0000" then
+          earxbyteaout <= earxbyteal; 
+        end if;
+      end if;
+
+    end process; 
   process(CLK)
 
   begin
@@ -338,11 +398,15 @@ begin  -- display
       if rising_edge(clk) then
         rxdatal <= rxdata;
         rxkl    <= rxk;
-
         cnt <= cnt + 1;
-        LEDLINK <= cnt(23);
-        
-        --LEDLINK <= RXLOCKED;        
+        LEDLINK <= ecycle; -- cnt(23);
+        LEDEVENT <= earxbytea(0); 
+        --LEDLINK <= RXLOCKED;
+        --
+        if ecycle = '1' then
+          ecyclecnt <= ecyclecnt + 1; 
+
+        end if;
       end if;
     end if;
   end process;

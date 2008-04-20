@@ -1,11 +1,11 @@
 library ieee;
 use ieee.std_logic_1164;
 package display_mem_pkg is
-		constant displayproc_inst_instruction_ram_INIT_00 : bit_vector(0 to 255) := X"10148444300413F484243FF410048414331413148404300413C48884300413B4";
-		constant displayproc_inst_instruction_ram_INIT_01 : bit_vector(0 to 255) := X"84D4101484A43FF4100484943084108484843004142484643FF4100484543014";
-		constant displayproc_inst_instruction_ram_INIT_02 : bit_vector(0 to 255) := X"86D4101486941014865410148614101485D41014859410148554101485141014";
-		constant displayproc_inst_instruction_ram_INIT_03 : bit_vector(0 to 255) := X"0A2403E080140A2403B003A08894101487D41014879410148754101487141014";
-		constant displayproc_inst_instruction_ram_INIT_04 : bit_vector(0 to 255) := X"0000000004D010848804108488140A2488318040101488208874091404108A04";
+		constant displayproc_inst_instruction_ram_INIT_00 : bit_vector(0 to 255) := X"10128442300213F284223FF210028412331213128402300213C28882300213B2";
+		constant displayproc_inst_instruction_ram_INIT_01 : bit_vector(0 to 255) := X"84D2101284A23FF2100284923082108284823002142284623FF2100284523012";
+		constant displayproc_inst_instruction_ram_INIT_02 : bit_vector(0 to 255) := X"86D2101286921012865210128612101285D21012859210128552101285121012";
+		constant displayproc_inst_instruction_ram_INIT_03 : bit_vector(0 to 255) := X"0A2203E080120A2203B003A08892101287D21012879210128752101287121012";
+		constant displayproc_inst_instruction_ram_INIT_04 : bit_vector(0 to 255) := X"0000000004D010828802108288120A2288318020101288208872091204108A02";
 		constant displayproc_inst_instruction_ram_INIT_05 : bit_vector(0 to 255) := X"0000000000000000000000000000000000000000000000000000000000000000";
 		constant displayproc_inst_instruction_ram_INIT_06 : bit_vector(0 to 255) := X"0000000000000000000000000000000000000000000000000000000000000000";
 		constant displayproc_inst_instruction_ram_INIT_07 : bit_vector(0 to 255) := X"0000000000000000000000000000000000000000000000000000000000000000";
