@@ -301,7 +301,7 @@ begin  -- display
       DGRANTD      => open,
       EARXBYTED    => open,
       EARXBYTESELD => open );
-
+  linkup <= not reset; 
   encodemux_inst : encodemux
     port map (
       CLK        => CLK,
@@ -341,9 +341,8 @@ begin  -- display
       ESENDREQ    => eprocreq(0),
       ESENDGRANT  => eprocgrant(0),
       ESENDDONE   => eprocdone(0),
-      ESENDDATA   => eprocdataa
-      -- dsp interface
-      --LEDEVENT    => LEDEVENT
+      ESENDDATA   => eprocdataa,
+      LEDEVENT    => LEDEVENT
       );
 
   process(jtagDRCK1, clk)
@@ -400,7 +399,6 @@ begin  -- display
         rxkl    <= rxk;
         cnt <= cnt + 1;
         LEDLINK <= ecycle; -- cnt(23);
-        LEDEVENT <= earxbytea(0); 
         --LEDLINK <= RXLOCKED;
         --
         if ecycle = '1' then
