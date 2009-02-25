@@ -10,10 +10,11 @@ use UNISIM.VComponents.all;
 entity blink is
 
   port (
-    CLK   : in  std_logic;
+    RXCLKIN   : in  std_logic;
     LED1  : out std_logic;
     LED2  : out std_logic;
     BRITE : out std_logic;
+    REV : out std_logic; 
     SLEEP : out std_logic;
     DCLK  : out std_logic;
     HD    : out std_logic;
@@ -53,13 +54,14 @@ architecture Behavioral of blink is
   signal y : std_logic_vector(8 downto 0) := (others => '0');
 
   signal rin, gin, bin : std_logic_vector(5 downto 0) := (others => '0');
-  
+  signal clk : std_logic := '0';
   signal framestart : std_logic := '0';
 
 begin  -- Behavioral
 
+  clk <= RXCLKIN;
+  REV <= '0'; 
   SLEEP <= '1';
-  BRITE <= '1';
 
   framecontrol_inst: framecontrol
     port map (
@@ -79,9 +81,9 @@ begin  -- Behavioral
       BIN        => bin); 
     
 
-  rin <= x(5 downto 0);
-  gin <= y(5 downto 0);
-  bin <= x(9 downto 4);
+  rin <= X(5 downto 0); 
+  gin <=  X(5 downto 0); 
+  bin <=  X(5 downto 0); 
   
   main : process (CLK)
   begin
@@ -92,6 +94,11 @@ begin  -- Behavioral
       LED2 <= cnt(22);
       
       framestart <= '1';
+      if cnt(15) /= '0' then
+        BRITE <= '1';
+      else
+        BRITE <= '0'; 
+      end if;
 
     end if;
 

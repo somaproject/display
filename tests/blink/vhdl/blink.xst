@@ -5,7 +5,7 @@ run
 -ifmt mixed
 -ofn blink
 -ofmt NGC
--p xc3s400-4-ft256
+-p xc3s1000-4-ft256
 -top blink
 -opt_mode Area
 -opt_level 2

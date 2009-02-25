@@ -1,23 +1,28 @@
-VHDLC=vhdlp
-VHDLS=vhdle
-WORKDIR=work.sym
+VHDLC=vcom
+VHDLS=vsim
+WORKDIR=work
 all: hw comp sim
 
-$(WORKDIR)/framecontrol/_behavioral.var: ../../vhdl/framecontrol.vhd
+$(WORKDIR)/framecontrol/behavioral.dat: $(WORKDIR)/touched ../../vhdl/framecontrol.vhd
+	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/framecontrol.vhd
 
-hw: $(WORKDIR)/framecontrol/_behavioral.var 
+hw: $(WORKDIR)/framecontrol/behavioral.dat 
 
 comp: 
 
-$(WORKDIR)/framecontroltest/_behavioral.var: framecontroltest.vhd
+$(WORKDIR)/framecontroltest/behavioral.dat: $(WORKDIR)/touched framecontroltest.vhd
+	mkdir -p $(WORKDIR)
 	$(VHDLC) framecontroltest.vhd
 
-sim: $(WORKDIR)/framecontroltest/_behavioral.var 
+sim: $(WORKDIR)/framecontroltest/behavioral.dat 
 runsim: all
 	$(VHDLS) framecontroltest
 
 
 clean:
-	rm -Rf $(WORKDIR)$
+	rm -Rf work 
 
+work/touched:
+	vlib  work
+	touch  work/touched

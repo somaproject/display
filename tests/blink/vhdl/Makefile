@@ -19,7 +19,7 @@ bitfile: $(PROJECT).bit
 
 SOURCES = *.vhd
 OPTIMIZE = high
-PART = xc3s400-ft256-4
+PART = xc3s1000-ft256-4
 SPEED = 4
 
 $(PROJECT): build/$(PROJECT).ncd
